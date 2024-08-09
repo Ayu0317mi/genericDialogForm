@@ -1,4 +1,7 @@
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+
+
 
 export default function Home() {
   return (
@@ -70,7 +73,7 @@ export default function Home() {
             </span>
           </h2>
           <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
+            Learn about Next.js in an interactive course with&nbsp;quizzes! edited
           </p>
         </a>
 
@@ -107,6 +110,11 @@ export default function Home() {
             Instantly deploy your Next.js site to a shareable URL with Vercel.
           </p>
         </a>
+        {/* Add Button Component here */}
+        <Button variant="default" size="default">
+          Click Me
+        </Button>
+        {/* You can use different variants and sizes */}
       </div>
     </main>
   );
