@@ -18,6 +18,7 @@ let mockData: Person[] = [
 }
 
  async function createPerson(person: Person): Promise<Person> {
+    //throw new Error('Simulated error during person creation');
     const newPerson = { ...person, id: Math.floor(Math.random() * 1000) };
     mockData.push(newPerson); // Add to the array
     logger.debug({ newPerson }, 'Created a new person');
@@ -27,6 +28,7 @@ let mockData: Person[] = [
 }
 
  async function updatePerson(person: Person): Promise<Person> {
+    //throw new Error('Simulated error during person creation');
     const index = mockData.findIndex(p => p.id === person.id);
     if (index !== -1) {
         mockData[index] = person; // Update the array

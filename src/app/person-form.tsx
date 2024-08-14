@@ -42,19 +42,24 @@ export function PersonForm({ person }: PersonFormProps) {
     });
 
     async function onSubmit(data: z.infer<typeof formSchema>) {
-        let savedPerson: Person;
-        if (person) {
-            console.log('Updating person:', person);
-            savedPerson = await updatePerson({ ...data, id: person.id });
-            toast.success('Person data updated successfully');
-        } else {
-            console.log('Creating person:', data);
-            savedPerson = await createPerson(data);
-            toast.success('Person added successfully');
-            form.reset(); // Reset the form after a successful add
+        try {
+            let savedPerson: Person;
+            if (person) {
+                console.log('Updating person:', person);
+                savedPerson = await updatePerson({ ...data, id: person.id });
+                toast.success('Person updated successfully');
+            } else {
+                console.log('Creating person:', data);
+                savedPerson = await createPerson(data);
+                toast.success('Person added successfully');
+                form.reset(); // Reset the form after a successful add
+            }
+            console.log('Saved person:', savedPerson);
+            setIsOpen(false); // Close the dialog after successful submission
+        } catch (error) {
+            console.error('Submission error:', error);
+            toast.error('Error: request failure');
         }
-        console.log('Saved person:', savedPerson);
-        setIsOpen(false); // Close the dialog after successful submission
     }
 
     return (
