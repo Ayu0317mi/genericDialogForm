@@ -18,6 +18,7 @@ let mockData: Person[] = [
 }
 
  async function createPerson(person: Person): Promise<Person> {
+    //return null;
     //throw new Error('Simulated error during person creation');
     const newPerson = { ...person, id: Math.floor(Math.random() * 1000) };
     mockData.push(newPerson); // Add to the array
