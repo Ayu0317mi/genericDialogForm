@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { Person } from '../../lib/model';
+import { Person } from '../lib/model';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { createPerson, updatePerson } from './actions';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { toast } from 'sonner';
 
 const formSchema = z.object({
     firstname: z.string().min(2).max(50),
@@ -45,9 +46,11 @@ export function PersonForm({ person }: PersonFormProps) {
         if (person) {
             console.log('Updating person:', person);
             savedPerson = await updatePerson({ ...data, id: person.id });
+            toast.success('Person data updated successfully');
         } else {
             console.log('Creating person:', data);
             savedPerson = await createPerson(data);
+            toast.success('Person added successfully');
             form.reset(); // Reset the form after a successful add
         }
         console.log('Saved person:', savedPerson);
@@ -65,7 +68,6 @@ export function PersonForm({ person }: PersonFormProps) {
                     <DialogDescription>
                         {person ? 'Update the details of the person' : 'Enter the details of the person'}
                     </DialogDescription>
-
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>

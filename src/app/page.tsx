@@ -14,6 +14,7 @@ import { deletePerson, getPeople } from "./actions";
 import { Person } from '@/lib/model';
 import { PersonForm } from './person-form';
 
+
 const PersonPage: React.FC = async() => {
     const people: Person[] = await getPeople();
 
