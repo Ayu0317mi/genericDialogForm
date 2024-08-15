@@ -47,7 +47,7 @@ export function PersonForm({ person }: PersonFormProps) {
             
             if (person) {
                 console.log('Updating person:', person);
-                savedPerson = await updatePerson({ ...data, id: person.id });
+                savedPerson = await updatePerson({ ...data, id: person.id ?? 0 });
                 if (savedPerson) {
                     toast.success('Person updated successfully');
                 } else {
@@ -55,7 +55,7 @@ export function PersonForm({ person }: PersonFormProps) {
                 }
             } else {
                 console.log('Creating person:', data);
-                savedPerson = await createPerson(data);
+                savedPerson = await createPerson({ ...data, id: 0 });
                 if (savedPerson) {
                     toast.success('Person added successfully');
                     form.reset(); // Reset the form after a successful add
