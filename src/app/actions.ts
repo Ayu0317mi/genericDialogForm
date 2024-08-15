@@ -25,9 +25,14 @@ const validation_path: string = "/people";
     //return null;
     //throw new Error('Simulated error during person creation');
     const newPerson = await prisma.person.create({
-        data: person,
+        data: {
+            firstname: person.firstname,
+            lastname: person.lastname,
+            phone: person.phone,
+          },
     });
     logger.debug({ newPerson }, 'Created a new person');
+    console.log(newPerson);
     revalidatePath(validation_path);
     return newPerson;
 }
