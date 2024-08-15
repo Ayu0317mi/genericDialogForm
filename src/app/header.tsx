@@ -11,11 +11,14 @@ const AppHeader: React.FC = () => {
               <span className="sr-only">Person App Shadcn</span>
             </Link>
             <nav className="ml-auto flex gap-4 sm:gap-6">
-              <Link href="#" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
+              <Link href="/" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
                 Server Side
               </Link>
               <Link href="/person" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
                 Client Side
+              </Link>
+              <Link href="/generic" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
+                Generic Modal
               </Link>
             </nav>
           </header>
