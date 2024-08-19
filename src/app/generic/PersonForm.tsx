@@ -16,7 +16,10 @@ const formSchema = z.object({
 });
 
 interface PersonFormProps {
-  person?: Person | null;
+  person: Person | null;
+
+  onSave: (person: Person) => Promise<void>;
+
   onClose: () => void;
 }
 

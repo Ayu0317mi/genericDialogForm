@@ -1,36 +1,28 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import GenericModal from '@/app/generic/GenericModal';
 import { PersonForm } from '@/app/generic/PersonForm';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Person } from '@/lib/model'; // Ensure this import matches your model path
+import { getPerson, createPerson, updatePerson } from './generic-actions'; // Update with actual path to your server actions
 
 export default function ExperimentPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [persons, setPersons] = useState<Person[]>([
-    { id: 1, firstname: "John", lastname: "Doe", phone: "1234567890" },
-    { id: 2, firstname: "Jane", lastname: "Smith", phone: "2345678901" },
-    { id: 3, firstname: "Bob", lastname: "Brown", phone: "3456789012" },
-    { id: 4, firstname: "Ayumi", lastname: "Nuguroho", phone: "3456789012" },
-  ]);
+  const [persons, setPersons] = useState<Person[]>([]);
+  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
 
-  interface PersonType {
-    id: number;
-    firstname: string;
-    lastname: string;
-    phone: string;
-  }
-  
-  let person: PersonType | null = null;
-  const [selectedPerson, setSelectedPerson] = useState<PersonType | null>(person);
-
-  interface Person {
-    id: number;
-    firstname: string;
-    lastname: string;
-    phone: string;
-  }
+  useEffect(() => {
+    // Fetch initial persons
+    async function fetchPersons() {
+      const data = await getPerson();
+      if (data) {
+        setPersons(data);
+      }
+    }
+    fetchPersons();
+  }, []);
 
   const handleOpenModal = (person?: Person) => {
     setSelectedPerson(person || null);
@@ -42,13 +34,15 @@ export default function ExperimentPage() {
     setSelectedPerson(null);
   };
 
-  const handleSavePerson = (person: Person) => {
+  const handleSavePerson = async (person: Person) => {
     if (selectedPerson) {
       // Update existing person
-      setPersons(persons.map(p => p.id === person.id ? person : p));
+      const updatedPerson = await updatePerson(person);
+      setPersons(persons.map(p => p.id === updatedPerson.id ? updatedPerson : p));
     } else {
       // Add new person
-      setPersons([...persons, { ...person, id: Math.floor(Math.random() * 1000) }]);
+      const newPerson = await createPerson(person);
+      setPersons([...persons, newPerson]);
     }
     handleCloseModal();
   };
@@ -84,7 +78,7 @@ export default function ExperimentPage() {
         onClose={handleCloseModal}
       >
         {/* The PersonForm goes inside the GenericModal */}
-        <PersonForm person={selectedPerson} onClose={handleCloseModal} />
+        <PersonForm person={selectedPerson} onSave={handleSavePerson} onClose={handleCloseModal} />
       </GenericModal>
     </div>
   );

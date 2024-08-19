@@ -13,6 +13,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { deletePerson, getPeople } from "./actions";
 import { Person } from '@/lib/model';
 import { PersonForm } from './person-form';
+import { DeletePersonForm} from './person-deletealert';
 
 
 const PersonPage: React.FC = async() => {
@@ -45,10 +46,7 @@ const PersonPage: React.FC = async() => {
                                     <TableCell>{person.phone}</TableCell>
                                     <TableCell className="flex space-x-2">
                                         <PersonForm person={person} />
-                                        <form action={deletePerson} className="inline">
-                                            <input type="hidden" name="id" value={person.id} />
-                                            <Button type='submit' variant="destructive" className="ml-2">Delete</Button>
-                                        </form>
+                                        <DeletePersonForm person={person} />
                                     </TableCell>
                                 </TableRow>
                             ))}

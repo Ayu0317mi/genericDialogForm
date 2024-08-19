@@ -10,12 +10,6 @@ import { logger } from '@/lib/logger';
 
 const validation_path: string = "/people";
 
-/*let mockData: Person[] = [
-    { id: 1, firstname: "John", lastname: "Doe", phone: "1234567890" },
-    { id: 2, firstname: "Jane", lastname: "Smith", phone: "2345678901" },
-    { id: 3, firstname: "Bob", lastname: "Brown", phone: "3456789012" },
-];*/
-
  async function getPeople(): Promise<PrismaPerson[]> {
     logger.debug('Fetching persons');
     return await prisma.person.findMany();
@@ -48,7 +42,7 @@ const validation_path: string = "/people";
     return updatedPerson;
 }
 
- async function deletePerson(formData: FormData): Promise<void> {
+  async function deletePerson(formData: FormData): Promise<void> {
     const id = parseInt(formData.get("id") as string, 10);
     await prisma.person.delete({
         where: { id },
@@ -56,7 +50,5 @@ const validation_path: string = "/people";
     logger.debug({ id }, 'Deleted person');
     revalidatePath(validation_path);
 }
-
-
 
 export { getPeople, createPerson, updatePerson, deletePerson };
