@@ -14,8 +14,9 @@ datasource db {
 }
 
 model Person {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   firstname String
   lastname  String
   phone     String
+  dob       DateTime  // Ensure this is present
 }

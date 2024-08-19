@@ -6,6 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from "@/components/ui/button";
+import { Calendar as CalendarIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
 import {
     Form,
     FormControl,
@@ -14,15 +16,24 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Input } from "@/components/ui/input";
 import { createPerson, updatePerson } from './actions';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from 'sonner';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const formSchema = z.object({
     firstname: z.string().min(2).max(50),
     lastname: z.string().min(2).max(50),
     phone: z.string().min(10).max(15),
+    dob: z.date(),
 });
 
 interface PersonFormProps {
@@ -38,12 +49,14 @@ export function PersonForm({ person }: PersonFormProps) {
             firstname: person?.firstname ?? '',
             lastname: person?.lastname ?? '',
             phone: person?.phone ?? '',
+            dob: person?.dob ? new Date(person.dob) : undefined,
         },
     });
 
     async function onSubmit(data: z.infer<typeof formSchema>) {
         try {
             let savedPerson: Person | null = null;
+            const dob = new Date(data.dob);
             
             if (person) {
                 console.log('Updating person:', person);
@@ -120,6 +133,26 @@ export function PersonForm({ person }: PersonFormProps) {
                                     <FormLabel>Phone</FormLabel>
                                     <FormControl>
                                         <Input placeholder='0422018632' {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="dob"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="pr-2">Date of Birth</FormLabel>
+                                    <FormControl>
+                                        <DatePicker
+                                            selected={field.value}
+                                            onChange={(date) => field.onChange(date)}
+                                            dateFormat="yyyy/MM/dd"
+                                            placeholderText="YYYY/MM/DD"
+                                            showYearDropdown
+                                        
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

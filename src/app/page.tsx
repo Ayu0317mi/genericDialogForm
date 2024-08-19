@@ -17,7 +17,7 @@ import { DeletePersonForm} from './person-deletealert';
 
 
 const PersonPage: React.FC = async() => {
-    const people: Person[] = await getPeople();
+    const people: Person[] = await getPeople() as Person[];
 
     return (
         <div className="flex justify-center mt-8 px-4">
@@ -35,6 +35,7 @@ const PersonPage: React.FC = async() => {
                                 <TableHead className="text-left">First name</TableHead>
                                 <TableHead className="text-left">Last name</TableHead>
                                 <TableHead className="text-left">Phone</TableHead>
+                                <TableHead className="text-left">Date of Birth</TableHead>
                                 <TableHead className="text-left">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -44,9 +45,10 @@ const PersonPage: React.FC = async() => {
                                     <TableCell>{person.firstname}</TableCell>
                                     <TableCell>{person.lastname}</TableCell>
                                     <TableCell>{person.phone}</TableCell>
+                                    <TableCell>{person.dob.toString()}</TableCell>
                                     <TableCell className="flex space-x-2">
-                                        <PersonForm person={person} />
-                                        <DeletePersonForm person={person} />
+                                        <PersonForm person={person} /> {/* Edit Form*/}
+                                        <DeletePersonForm person={person} /> {/* Delete Form*/}
                                     </TableCell>
                                 </TableRow>
                             ))}

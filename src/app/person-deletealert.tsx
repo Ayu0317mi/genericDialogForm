@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Person } from '../lib/model';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { date, z } from 'zod';
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -22,6 +22,7 @@ const formSchema = z.object({
     firstname: z.string().min(2).max(50),
     lastname: z.string().min(2).max(50),
     phone: z.string().min(10).max(15),
+    dob: z.date(),
 });
 
 interface DeletePersonFormProps {
@@ -37,6 +38,7 @@ export function DeletePersonForm({ person }: DeletePersonFormProps) {
             firstname: person?.firstname ?? '',
             lastname: person?.lastname ?? '',
             phone: person?.phone ?? '',
+            dob: person?.dob ? new Date(person.dob) : undefined,
         },
     });
 
@@ -63,15 +65,16 @@ export function DeletePersonForm({ person }: DeletePersonFormProps) {
         }
     }
 
+
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                {person ? <Button variant="outline" onClick={() => setIsOpen(true)} style={{ backgroundColor: 'red' }}>Delete</Button> : null}
+                {person ? <Button variant="outline" onClick={() => setIsOpen(true)} style={{ backgroundColor: 'red', color: '#fff' }}>Delete</Button> : null}
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Delete this person</DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription style={{ color: 'red' }}>
                         This action cannot be undone. Are you sure you want to delete this person?
                     </DialogDescription>
                 </DialogHeader>
@@ -111,6 +114,19 @@ export function DeletePersonForm({ person }: DeletePersonFormProps) {
                                     <FormLabel>Phone</FormLabel>
                                     <FormControl>
                                         <p>{field.value}</p>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="dob"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Date of Birth</FormLabel>
+                                    <FormControl>
+                                        <p>{field.value.toString()}</p>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

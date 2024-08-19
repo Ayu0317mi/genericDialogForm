@@ -23,6 +23,7 @@ const validation_path: string = "/people";
             firstname: person.firstname,
             lastname: person.lastname,
             phone: person.phone,
+            dob: person.dob,
           },
     });
     logger.debug({ newPerson }, 'Created a new person');
