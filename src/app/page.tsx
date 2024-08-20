@@ -14,6 +14,7 @@ import { deletePerson, getPeople } from "./actions";
 import { Person } from '@/lib/model';
 import { PersonForm } from './person-form';
 import { DeletePersonForm} from './person-deletealert';
+import { format } from 'date-fns';
 
 
 const PersonPage: React.FC = async() => {
@@ -45,7 +46,7 @@ const PersonPage: React.FC = async() => {
                                     <TableCell>{person.firstname}</TableCell>
                                     <TableCell>{person.lastname}</TableCell>
                                     <TableCell>{person.phone}</TableCell>
-                                    <TableCell>{person.dob.toString()}</TableCell>
+                                    <TableCell>{format(new Date(person.dob), 'MMMM dd, yyyy')}</TableCell>
                                     <TableCell className="flex space-x-2">
                                         <PersonForm person={person} /> {/* Edit Form*/}
                                         <DeletePersonForm person={person} /> {/* Delete Form*/}
