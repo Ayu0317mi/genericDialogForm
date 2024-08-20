@@ -26,8 +26,10 @@ import { Input } from "@/components/ui/input";
 import { createPerson, updatePerson } from './actions';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from 'sonner';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import React from "react";
+import { format } from 'date-fns';
+//import DatePicker from 'react-datepicker';
+//import 'react-datepicker/dist/react-datepicker.css';
 
 const formSchema = z.object({
     firstname: z.string().min(2).max(50),
@@ -36,12 +38,15 @@ const formSchema = z.object({
     dob: z.date(),
 });
 
+
 interface PersonFormProps {
     person?: Person;
 }
 
 export function PersonForm({ person }: PersonFormProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [date, setDate] = React.useState<Date>()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -145,14 +150,30 @@ export function PersonForm({ person }: PersonFormProps) {
                                 <FormItem>
                                     <FormLabel className="pr-2">Date of Birth</FormLabel>
                                     <FormControl>
-                                        <DatePicker
-                                            selected={field.value}
-                                            onChange={(date) => field.onChange(date)}
-                                            dateFormat="yyyy/MM/dd"
-                                            placeholderText="YYYY/MM/DD"
-                                            showYearDropdown
-                                        
-                                        />
+                                    <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                            variant={"outline"}
+                                            className={cn("w-[240px] justify-start text-left font-normal", !field.value && "text-muted-foreground")}
+                                            >
+                                            <CalendarIcon className="mr-2 h-4 w-4" />
+                                            {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent align="start" className=" w-auto p-0">
+                                            <Calendar
+                                            mode="single"
+                                            captionLayout="dropdown-buttons"
+                                            selected={date}
+                                            onSelect={(date) => {
+                                                field.onChange(date);
+                                                setIsPopoverOpen(false);
+                                            }}
+                                            fromYear={1950}
+                                            toYear={2030}
+                                            />
+                                        </PopoverContent>
+                                        </Popover>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
