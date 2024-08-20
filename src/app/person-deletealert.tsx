@@ -17,6 +17,7 @@ import {
 import { createPerson, updatePerson, deletePerson } from './actions';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from 'sonner';
+import { format } from 'date-fns';
 
 const formSchema = z.object({
     firstname: z.string().min(2).max(50),
@@ -54,7 +55,7 @@ export function DeletePersonForm({ person }: DeletePersonFormProps) {
                 // Call the deletePerson function with the FormData
                 await deletePerson(formData);
     
-                toast.success('Person deleted successfully');
+                toast.success('Person deleted', { style: { backgroundColor: 'red', color: '#fff'  } });
             } else {
                 throw new Error('No person selected to delete');
             }
@@ -73,9 +74,10 @@ export function DeletePersonForm({ person }: DeletePersonFormProps) {
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Delete this person</DialogTitle>
+                    <DialogTitle style={{ color: 'red' }}>Delete this person</DialogTitle>
                     <DialogDescription style={{ color: 'red' }}>
-                        This action cannot be undone. Are you sure you want to delete this person?
+                        This action cannot be undone. 
+                        Are you sure you want to delete this person?
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -126,7 +128,7 @@ export function DeletePersonForm({ person }: DeletePersonFormProps) {
                                 <FormItem>
                                     <FormLabel>Date of Birth</FormLabel>
                                     <FormControl>
-                                        <p>{field.value.toString()}</p>
+                                        <p>{format(field.value, 'MMMM dd, yyyy')}</p>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

@@ -5,6 +5,7 @@ import { Person } from '../lib/model';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { personFormSchema } from "@/schemas/person-list";
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -28,15 +29,13 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { toast } from 'sonner';
 import React from "react";
 import { format } from 'date-fns';
-//import DatePicker from 'react-datepicker';
-//import 'react-datepicker/dist/react-datepicker.css';
 
-const formSchema = z.object({
+/*const formSchema = z.object({
     firstname: z.string().min(2).max(50),
     lastname: z.string().min(2).max(50),
     phone: z.string().min(10).max(15),
     dob: z.date(),
-});
+});*/
 
 
 interface PersonFormProps {
@@ -48,8 +47,8 @@ export function PersonForm({ person }: PersonFormProps) {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [date, setDate] = React.useState<Date>()
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof personFormSchema>>({
+        resolver: zodResolver(personFormSchema),
         defaultValues: {
             firstname: person?.firstname ?? '',
             lastname: person?.lastname ?? '',
@@ -58,7 +57,7 @@ export function PersonForm({ person }: PersonFormProps) {
         },
     });
 
-    async function onSubmit(data: z.infer<typeof formSchema>) {
+    async function onSubmit(data: z.infer<typeof personFormSchema>)  {
         try {
             let savedPerson: Person | null = null;
             const dob = new Date(data.dob);
@@ -184,7 +183,7 @@ export function PersonForm({ person }: PersonFormProps) {
                                 Close
                             </Button>
                             <Button type="submit">
-                                {person ? "Save" : "Add"}
+                                {person ? "Update" : "Add"}
                             </Button>
                         </DialogFooter>
                     </form>

@@ -12,7 +12,7 @@ const AppHeader: React.FC = () => {
             </Link>
             <nav className="ml-auto flex gap-4 sm:gap-6">
               <Link href="/" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
-                Server Side
+                PersonList
               </Link>
               <Link href="/person" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
                 Client Side
