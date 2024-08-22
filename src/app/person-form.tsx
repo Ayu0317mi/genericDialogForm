@@ -59,6 +59,7 @@ export function PersonForm({ person }: PersonFormProps) {
 
     async function onSubmit(data: z.infer<typeof personFormSchema>)  {
         try {
+            console.log('Form data before submission:', data);
             let savedPerson: Person | null = null;
             const dob = new Date(data.dob);
             
@@ -164,8 +165,9 @@ export function PersonForm({ person }: PersonFormProps) {
                                             mode="single"
                                             captionLayout="dropdown-buttons"
                                             selected={date}
-                                            onSelect={(date) => {
-                                                field.onChange(date);
+                                            onSelect={(selectedDate) => {
+                                                field.onChange(selectedDate);
+                                                setDate(selectedDate);  
                                                 setIsPopoverOpen(false);
                                             }}
                                             fromYear={1950}

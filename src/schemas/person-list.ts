@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const personFormSchema = z.object({
   id: z.string().optional(),
-  user_id: z.string(), // TODO: update when we have auth
   firstname: z
     .string({
       required_error: "Required",
@@ -37,8 +36,14 @@ export const personFormSchema = z.object({
       message:
         "Invalid AUS phone number format. Enter 10 numbers, 13 if using +61",
     }).describe('Only Australian phone number.'),
-  dob: z.date({
-    required_error: "Required",
-    invalid_type_error: "Invalid date",
-  }),
+    dob: z.date({
+      required_error: "Required",
+      invalid_type_error: "Invalid date",
+    })
+    .refine((value: Date) => {
+      const currentDate = new Date();
+      return value <= currentDate;
+    }, {
+      message: "Date of birth cannot be in the future",
+    })
 });
