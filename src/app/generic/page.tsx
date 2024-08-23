@@ -1,85 +1,80 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from 'react';
-import GenericModal from '@/app/generic/GenericModal';
-import { PersonForm } from '@/app/generic/PersonForm';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Person } from '@/lib/model'; // Ensure this import matches your model path
-import { getPerson, createPerson, updatePerson } from './generic-actions'; // Update with actual path to your server actions
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import GenericDialog from "./GenericDialog"
 
-export default function ExperimentPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [persons, setPersons] = useState<Person[]>([]);
-  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
+const formSchema = z.object({
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+})
 
-  useEffect(() => {
-    // Fetch initial persons
-    async function fetchPersons() {
-      const data = await getPerson();
-      if (data) {
-        setPersons(data);
-      }
-    }
-    fetchPersons();
-  }, []);
+// Infer the form schema type
+type FormSchemaType = z.infer<typeof formSchema>
 
-  const handleOpenModal = (person?: Person) => {
-    setSelectedPerson(person || null);
-    setIsModalOpen(true);
-  };
+// Define the props interface
+interface UserFormProps {
+  defaultValues: FormSchemaType
+  onSubmit: (data: FormSchemaType) => void
+}
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedPerson(null);
-  };
-
-  const handleSavePerson = async (person: Person) => {
-    if (selectedPerson) {
-      // Update existing person
-      const updatedPerson = await updatePerson(person);
-      setPersons(persons.map(p => p.id === updatedPerson.id ? updatedPerson : p));
-    } else {
-      // Add new person
-      const newPerson = await createPerson(person);
-      setPersons([...persons, newPerson]);
-    }
-    handleCloseModal();
-  };
+const UserForm: React.ComponentType<{ defaultValues?: { name: string; } | undefined; onSubmit: (data: { name: string; }) => void; }> = ({ defaultValues, onSubmit }) => {
+  const form = useForm<FormSchemaType>({
+    resolver: zodResolver(formSchema),
+    defaultValues: defaultValues || { name: "" },
+  })
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-xl font-bold mb-4">Experiment with Generic Modal and Person Form</h1>
-      
-      {/* Button to open the modal */}
-      <Button onClick={() => handleOpenModal()}>Add Person</Button>
+    <Form {...form}>
+      <form id="genericForm" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="John Doe" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  )
+}
 
-      {/* Display the list of persons */}
-      <div className="grid grid-cols-1 gap-4 mt-4">
-        {persons.map(person => (
-          <Card key={person.id} className="shadow">
-            <CardHeader>
-              <CardTitle>{person.firstname} {person.lastname}</CardTitle>
-              <CardDescription>{person.phone}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" onClick={() => handleOpenModal(person)}>Edit</Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+export default function ExampleUsage() {
+  const addUser = async (data: FormSchemaType) => {
+    // Server action to add user
+    console.log('Adding user:', data)
+  }
 
-      {/* The generic modal that wraps around the PersonForm */}
-      <GenericModal
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        title="Person Form"
-        description="Fill out the form below to add or edit a person."
-        onClose={handleCloseModal}
-      >
-        {/* The PersonForm goes inside the GenericModal */}
-        <PersonForm person={selectedPerson} onSave={handleSavePerson} onClose={handleCloseModal} />
-      </GenericModal>
+  const editUser = async (data: FormSchemaType) => {
+    // Server action to edit user
+    console.log('Editing user:', data)
+  }
+
+  const existingUser = { name: "Jane Doe" }
+
+  return (
+    <div className="space-y-4">
+      <GenericDialog
+        FormComponent={UserForm}
+        addAction={addUser}
+        editAction={editUser}
+      />
+      <GenericDialog
+        FormComponent={UserForm}
+        object={existingUser}
+        addAction={addUser}
+        editAction={editUser}
+      />
     </div>
-  );
+  )
 }

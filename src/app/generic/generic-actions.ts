@@ -3,9 +3,9 @@
 import { Person } from '@/lib/model';
 
 const mockData: Person[] = [
-    { id: 1, firstname: "John", lastname: "Doe", phone: "1234567890" },
-    { id: 2, firstname: "Jane", lastname: "Smith", phone: "2345678901" },
-    { id: 3, firstname: "Bob", lastname: "Brown", phone: "3456789012" },
+    { id: 1, firstname: "John", lastname: "Doe", phone: "1234567890", dob: new Date() },
+    { id: 2, firstname: "Jane", lastname: "Smith", phone: "2345678901", dob: new Date() },
+    { id: 3, firstname: "Bob", lastname: "Brown", phone: "3456789012", dob: new Date() },
 ];
 
 export async function getPerson(): Promise<Person[] | null> {
