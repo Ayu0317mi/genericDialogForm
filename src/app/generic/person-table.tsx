@@ -1,10 +1,9 @@
-'use server';
+'use client';
 
 import { z } from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import GenericDialog from "./GenericDialog";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { getPerson } from "./generic-actions";
 import PersonForm from "./person-form";
 import { personFormSchema } from "./form-schema";
@@ -34,36 +33,44 @@ const PersonTable = ({ persons }: PersonTableProps) => {
     const existingUser = { firstname: "John", lastname: "Doe" };
 
     return (
-        <div>
-            <GenericDialog
-                FormComponent={PersonForm}
-                addAction={addUser}
-                editAction={editUser}
-            />
-
-            <GenericDialog
-                FormComponent={PersonForm}
-                object={existingUser}
-                addAction={addUser}
-                editAction={editUser}
-            />
-
-            <Table>            
-                <TableHead>
-                    <TableRow>
-                        <TableCell>First Name</TableCell>
-                        <TableCell>Last Name</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {persons.map((person) => (
-                        <TableRow key={person.id}>
-                            <TableCell>{person.firstname}</TableCell>
-                            <TableCell>{person.lastname}</TableCell>
+        <div className="justify-center mt-8 px-4">
+            <Card className="w-full max-w-4xl bg-white shadow-lg rounded-lg">
+                <CardHeader>
+                    <div className="flex justify-between items-center">
+                        <h3 className="text-lg font-bold">Person List</h3>
+                        <GenericDialog
+                            FormComponent={PersonForm}
+                            addAction={addUser}
+                            editAction={editUser}
+                        />
+                    </div>
+                </CardHeader>
+                <CardContent className="p-8">
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>First Name</TableCell>
+                            <TableCell>Last Name</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+                        {persons.map((person) => (
+                            <TableRow key={person.id}>
+                                <TableCell>{person.firstname}</TableCell>
+                                <TableCell>{person.lastname}</TableCell>
+
+                                <GenericDialog
+                                    FormComponent={PersonForm}
+                                    object={existingUser}
+                                    addAction={addUser}
+                                    editAction={editUser}
+                                />
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+                </CardContent>
+            </Card>
         </div>
     );
 };
