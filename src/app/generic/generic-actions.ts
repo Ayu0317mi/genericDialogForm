@@ -1,6 +1,8 @@
 "use server"
 
 import { Person } from '@/lib/model';
+import { z } from "zod";
+import { personFormSchema } from "./form-schema";
 
 const mockData: Person[] = [
     { id: 1, firstname: "John", lastname: "Doe", phone: "1234567890", dob: new Date() },
@@ -44,3 +46,16 @@ export async function updatePerson(person: Person): Promise<Person> {
     return person;
 }
 
+export type PersonFormData = z.infer<typeof personFormSchema>;
+
+export const addUser = async (data: PersonFormData) => {
+    'use server';
+    console.log('Adding user:', data);
+    // Logic to add user to the database
+};
+
+export const editUser = async (data: PersonFormData) => {
+    'use server';
+    console.log('Editing user:', data);
+    // Logic to edit user in the database
+};
