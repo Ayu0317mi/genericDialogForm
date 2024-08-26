@@ -168,7 +168,7 @@ export function PersonForm({ person }: PersonFormProps) {
                                             onSelect={(selectedDate) => {
                                                 field.onChange(selectedDate);
                                                 setDate(selectedDate);  
-                                                setIsPopoverOpen(false);
+                                                //setIsPopoverOpen(false);
                                             }}
                                             fromYear={1950}
                                             toYear={2030}

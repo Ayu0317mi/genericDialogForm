@@ -6,10 +6,24 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import GenericDialog from "./GenericDialog"
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
+import { getPerson } from "./generic-actions";
+import { useState, useEffect } from "react";
+
+interface Person {
+  id: number;
+  firstname: string;
+  lastname: string;
+  phone: string;
+  dob: Date;
+}
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+  firstname: z.string().min(2, {
+    message: "Firstname must be at least 2 characters.",
+  }),
+  lastname: z.string().min(2, {
+    message: "Lastname must be at least 2 characters.",
   }),
 })
 
@@ -22,10 +36,10 @@ interface UserFormProps {
   onSubmit: (data: FormSchemaType) => void
 }
 
-const UserForm: React.ComponentType<{ defaultValues?: { name: string; } | undefined; onSubmit: (data: { name: string; }) => void; }> = ({ defaultValues, onSubmit }) => {
+const UserForm: React.ComponentType<{ defaultValues?: { firstname: string; lastname: string } | undefined; onSubmit: (data: { firstname: string; lastname: string }) => void; }> = ({ defaultValues, onSubmit }) => {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
-    defaultValues: defaultValues || { name: "" },
+    defaultValues: defaultValues || { firstname: "", lastname: "" },
   })
 
   return (
@@ -33,17 +47,30 @@ const UserForm: React.ComponentType<{ defaultValues?: { name: string; } | undefi
       <form id="genericForm" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="name"
+          name="firstname"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>First Name</FormLabel>
               <FormControl>
-                <Input placeholder="John Doe" {...field} />
+                <Input placeholder="first name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <FormField
+        control={form.control}
+        name="lastname"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Last Name</FormLabel>
+            <FormControl>
+              <Input placeholder="last name" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       </form>
     </Form>
   )
@@ -60,7 +87,7 @@ export default function ExampleUsage() {
     console.log('Editing user:', data)
   }
 
-  const existingUser = { name: "Jane Doe" }
+  const existingUser = { firstname: "John", lastname: "Doe" }
 
   return (
     <div className="space-y-4">
@@ -77,4 +104,37 @@ export default function ExampleUsage() {
       />
     </div>
   )
+
+  
 }
+
+
+
+const UserTable: React.FC = async () => {
+  // Add your code here to fetch the people data
+  const people: Person[] | null = await getPerson();
+  
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>First Name</TableCell>
+          <TableCell>Last Name</TableCell>
+          <TableCell>Phone</TableCell>
+          <TableCell>Date of Birth</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {people?.map((user) => (
+          <TableRow key={user.id}>
+            <TableCell>{user.firstname}</TableCell>
+            <TableCell>{user.lastname}</TableCell>
+            <TableCell>{user.phone}</TableCell>
+            <TableCell>{user.dob.toDateString()}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
+
