@@ -1,8 +1,8 @@
-'use client';
+'use server';
 
 import { z } from "zod";
 import GenericDialog from "./GenericDialog";
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from "@/components/ui/table";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { getPerson } from "./generic-actions";
 import PersonForm from "./person-form";
@@ -20,16 +20,17 @@ interface PersonTableProps {
     persons: Person[];
 }
 
+const addUser = async (data: PersonFormData) => {
+    'use server';
+    console.log('Adding user:', data);
+};
+
+const editUser = async (data: PersonFormData) => {
+    'use server';
+    console.log('Editing user:', data);
+};
+
 const PersonTable = ({ persons }: PersonTableProps) => {
-    const addUser = async (data: PersonFormData) => {
-        console.log('Adding user:', data);
-    };
-
-    const editUser = async (data: PersonFormData) => {
-        // Server action to edit user
-        console.log('Editing user:', data);
-    };
-
     const existingUser = { firstname: "John", lastname: "Doe" };
 
     return (
@@ -47,24 +48,26 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                 </CardHeader>
                 <CardContent className="p-8">
                 <Table>
-                    <TableHead>
+                    <TableHeader>
                         <TableRow>
-                            <TableCell>First Name</TableCell>
-                            <TableCell>Last Name</TableCell>
+                            <TableHead className="text-left">First name</TableHead>
+                            <TableHead className="text-left">Last name</TableHead>
+                            <TableHead className="text-left">Actions</TableHead>
                         </TableRow>
-                    </TableHead>
+                    </TableHeader>
                     <TableBody>
                         {persons.map((person) => (
                             <TableRow key={person.id}>
                                 <TableCell>{person.firstname}</TableCell>
                                 <TableCell>{person.lastname}</TableCell>
-
-                                <GenericDialog
-                                    FormComponent={PersonForm}
-                                    object={existingUser}
-                                    addAction={addUser}
-                                    editAction={editUser}
-                                />
+                                <TableCell>
+                                    <GenericDialog
+                                        FormComponent={PersonForm}
+                                        object={existingUser}
+                                        addAction={addUser}
+                                        editAction={editUser}
+                                    />
+                                </TableCell>    
                             </TableRow>
                         ))}
                     </TableBody>
