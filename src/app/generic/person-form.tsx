@@ -20,7 +20,7 @@ interface Person {
 type FormSchemaType = z.infer<typeof personFormSchema>;
 
 interface PersonFormProps {
-  object: Person;
+  object?: Person;
   addAction: (data: FormSchemaType) => Promise<void>;
   editAction: (data: FormSchemaType) => Promise<void>;
 }
@@ -33,7 +33,7 @@ const PersonForm: React.FC<PersonFormProps> = ({ object, addAction, editAction }
 
   const onSubmit = (data: FormSchemaType) => {
     if (object) {
-      editAction(data);
+      return editAction({ ...data, id: object.id });
     } else {
       addAction(data);
     }
@@ -88,6 +88,7 @@ const PersonForm: React.FC<PersonFormProps> = ({ object, addAction, editAction }
       )}
       editAction={editAction}
       addAction={addAction}
+      object={object} // Pass the object to GenericDialog
     />
   );
 };
