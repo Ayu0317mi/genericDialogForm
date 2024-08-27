@@ -28,7 +28,11 @@ interface PersonFormProps {
 const PersonForm: React.FC<PersonFormProps> = ({ object, addAction, editAction }) => {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(personFormSchema),
-    defaultValues: null || { firstname: "", lastname: "" },
+    defaultValues: object ? {
+      firstname: object.firstname,
+      lastname: object.lastname,
+      phone: object.phone
+    } : { firstname: "", lastname: "", phone: "" },
   });
 
   const onSubmit = (data: FormSchemaType) => {
