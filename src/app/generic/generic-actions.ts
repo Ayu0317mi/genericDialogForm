@@ -34,7 +34,7 @@ export const addUser = async (data: PersonFormData): Promise<void> =>{
     console.log('User added:', newPerson);
 };
 
-export const editUser = async (data: PersonFormData): Promise<Person> =>{
+export const editUser = async (data: PersonFormData): Promise<void> =>{
     'use server';
     console.log('Editing user:', data);
     // Logic to edit user in the database
@@ -54,9 +54,6 @@ export const editUser = async (data: PersonFormData): Promise<Person> =>{
     mockData[index] = updatedPerson;
 
     console.log('User edited:', updatedPerson);
-
-    return updatedPerson;
-
 };
 
 

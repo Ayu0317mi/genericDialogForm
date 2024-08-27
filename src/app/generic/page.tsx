@@ -8,7 +8,7 @@ export default async function ExampleUsage() {
   const persons = await getPerson();
 
   return (
-      <div>
+      <div className="flex justify-center">
           <div>
           <PersonTable persons={persons ?? []} />;
           </div>

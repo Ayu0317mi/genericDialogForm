@@ -43,6 +43,11 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                                     <TableCell>{person.lastname}</TableCell>  
                                     <TableCell>{person.phone}</TableCell>
                                     <TableCell>
+                                    <PersonForm 
+                                            object={person}
+                                            addAction={addUser} 
+                                            editAction={editUser} 
+                                        />
                                     </TableCell>
                                 </TableRow>
                             ))}

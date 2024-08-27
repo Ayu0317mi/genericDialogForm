@@ -8,24 +8,31 @@ import { z } from "zod";
 import GenericDialog from "./GenericDialog";
 import { personFormSchema } from "./form-schema";
 
+interface Person {
+  id: number;
+  firstname: string;
+  lastname: string;
+  phone: string;
+}
+
 
 // Infer the form schema type
 type FormSchemaType = z.infer<typeof personFormSchema>;
 
 interface PersonFormProps {
-  defaultValues?: FormSchemaType;
+  object: Person;
   addAction: (data: FormSchemaType) => Promise<void>;
   editAction: (data: FormSchemaType) => Promise<void>;
 }
 
-const PersonForm: React.FC<PersonFormProps> = ({ defaultValues, addAction, editAction }) => {
+const PersonForm: React.FC<PersonFormProps> = ({ object, addAction, editAction }) => {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(personFormSchema),
-    defaultValues: defaultValues || { firstname: "", lastname: "" },
+    defaultValues: null || { firstname: "", lastname: "" },
   });
 
   const onSubmit = (data: FormSchemaType) => {
-    if (defaultValues) {
+    if (object) {
       editAction(data);
     } else {
       addAction(data);
