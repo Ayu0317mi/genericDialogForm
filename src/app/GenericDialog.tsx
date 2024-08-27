@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -36,6 +36,10 @@ export default function GenericDialog<T>({
   submitButtonLabel = object ? 'Save Changes' : 'Add Item',
 }: GenericDialogProps<T>) {
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    console.log("Dialog open state: ", open);
+  }, [open]);
 
   const handleSubmit = async (data: T) => {
     if (object) {

@@ -10,7 +10,7 @@ export default async function ExampleUsage() {
   return (
       <div className="flex justify-center">
           <div>
-          <PersonTable persons={persons ?? []} />;
+          <PersonTable persons={persons ?? []} />
           </div>
       </div>
   )
