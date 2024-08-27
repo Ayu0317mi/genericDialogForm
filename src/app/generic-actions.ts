@@ -11,7 +11,7 @@ const mockData: Person[] = [
     { id: 3, firstname: "Bob", lastname: "Brown", phone: "3456789012", dob: new Date() },
 ];
 
-const validation_path: string = "/http://localhost:3000/";
+const validation_path: string = "https://generic-dialog-form.vercel.app/";
 
 export async function getPerson(): Promise<Person[] | null> {
     return mockData;
