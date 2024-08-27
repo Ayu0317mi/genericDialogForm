@@ -19,7 +19,7 @@ export async function getPerson(): Promise<Person[] | null> {
 
 export type PersonFormData = z.infer<typeof personFormSchema>;
 
-export const addUser = async (data: PersonFormData): Promise<Person> =>{
+export const addUser = async (data: PersonFormData): Promise<void> =>{
     'use server';
     let newId = Math.floor(Math.random() * 1000);
     while (mockData.some(p => p.id === newId)) {
@@ -33,7 +33,7 @@ export const addUser = async (data: PersonFormData): Promise<Person> =>{
     mockData.push(newPerson);
 
     revalidatePath(validation_path);
-    return newPerson;
+    //return newPerson;
 };
 
 export const editUser = async (data: PersonFormData): Promise<void> =>{
