@@ -9,6 +9,7 @@ interface Person {
     id: number;
     firstname: string;
     lastname: string;
+    phone: string;
 }
 
 interface PersonTableProps {
@@ -31,7 +32,8 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                             <TableRow>
                                 <TableHead className="text-left">First name</TableHead>
                                 <TableHead className="text-left">Last name</TableHead>
-                                <TableHead className="text-left">Actions</TableHead>
+                                <TableHead className="text-left">Phone Number</TableHead>
+                                <TableHead className="text-left">Action</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -39,6 +41,8 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                                 <TableRow key={person.id}>
                                     <TableCell>{person.firstname}</TableCell>
                                     <TableCell>{person.lastname}</TableCell>  
+                                    <TableCell>{person.phone}</TableCell>
+                                    
                                 </TableRow>
                             ))}
                         </TableBody>

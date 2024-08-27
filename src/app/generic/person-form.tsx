@@ -8,6 +8,7 @@ import { z } from "zod";
 import GenericDialog from "./GenericDialog";
 import { personFormSchema } from "./form-schema";
 
+
 // Infer the form schema type
 type FormSchemaType = z.infer<typeof personFormSchema>;
 
@@ -57,6 +58,19 @@ const PersonForm: React.FC<PersonFormProps> = ({ defaultValues, addAction, editA
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Last name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="+61-xxx-xxx-xxx" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

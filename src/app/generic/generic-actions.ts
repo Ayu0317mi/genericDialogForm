@@ -14,7 +14,35 @@ export async function getPerson(): Promise<Person[] | null> {
     return mockData;
 }
 
-export async function createPerson(person: Person): Promise<Person> {
+export type PersonFormData = z.infer<typeof personFormSchema>;
+
+export const addUser = async (data: PersonFormData): Promise<void> =>{
+    'use server';
+    console.log('Adding user:', data);
+    // Logic to add user to the database
+    // Generate a unique ID
+    let newId = Math.floor(Math.random() * 1000);
+    while (mockData.some(p => p.id === newId)) {
+        newId = Math.floor(Math.random() * 1000);
+    }
+
+    // Create a new Person object with the generated ID and default dob
+    const newPerson: Person = { ...data, id: newId, dob: new Date() };
+
+    // Add the new person to the mockData array
+    mockData.push(newPerson);
+    console.log('User added:', newPerson);
+};
+
+export const editUser = async (data: PersonFormData): Promise<void> =>{
+    'use server';
+    console.log('Editing user:', data);
+    // Logic to edit user in the database
+};
+
+
+//original functions created by v0
+/*export async function createPerson(person: Person): Promise<Person> {
     // Generate a unique ID
     let newId = Math.floor(Math.random() * 1000);
     
@@ -44,18 +72,4 @@ export async function updatePerson(person: Person): Promise<Person> {
     mockData[index] = person;
 
     return person;
-}
-
-export type PersonFormData = z.infer<typeof personFormSchema>;
-
-export const addUser = async (data: PersonFormData) => {
-    'use server';
-    console.log('Adding user:', data);
-    // Logic to add user to the database
-};
-
-export const editUser = async (data: PersonFormData) => {
-    'use server';
-    console.log('Editing user:', data);
-    // Logic to edit user in the database
-};
+}*/
