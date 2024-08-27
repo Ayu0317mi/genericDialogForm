@@ -34,10 +34,29 @@ export const addUser = async (data: PersonFormData): Promise<void> =>{
     console.log('User added:', newPerson);
 };
 
-export const editUser = async (data: PersonFormData): Promise<void> =>{
+export const editUser = async (data: PersonFormData): Promise<Person> =>{
     'use server';
     console.log('Editing user:', data);
     // Logic to edit user in the database
+    const index = mockData.findIndex(p => p.id === data.id);
+
+    if (index === -1) {
+        throw new Error(`Person with ID ${data.id} not found`);
+    }
+
+    // Ensure `id` is defined
+    if (data.id === undefined) {
+        throw new Error('ID is required for editing a user');
+    }
+
+    const updatedPerson: Person = { ...data, id: data.id, dob: new Date() };
+
+    mockData[index] = updatedPerson;
+
+    console.log('User edited:', updatedPerson);
+
+    return updatedPerson;
+
 };
 
 

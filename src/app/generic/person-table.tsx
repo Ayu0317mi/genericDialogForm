@@ -42,7 +42,8 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                                     <TableCell>{person.firstname}</TableCell>
                                     <TableCell>{person.lastname}</TableCell>  
                                     <TableCell>{person.phone}</TableCell>
-                                    
+                                    <TableCell>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

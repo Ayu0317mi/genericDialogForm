@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const personFormSchema = z.object({
+  id: z.number().optional(),
     firstname: z.string().min(2, {
       message: "Firstname must be at least 2 characters.",
     }),

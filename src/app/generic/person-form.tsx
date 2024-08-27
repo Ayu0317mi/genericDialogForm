@@ -79,8 +79,8 @@ const PersonForm: React.FC<PersonFormProps> = ({ defaultValues, addAction, editA
           </form>
         </Form>
       )}
-      addAction={addAction}
       editAction={editAction}
+      addAction={addAction}
     />
   );
 };
