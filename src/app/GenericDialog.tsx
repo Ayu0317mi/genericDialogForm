@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm, UseFormReturn } from 'react-hook-form';
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, UseFormReturn, FieldValues, DefaultValues } from 'react-hook-form';
+import { z, ZodType } from 'zod';
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,10 +13,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { z } from "zod";
 
-interface GenericDialogProps<T> {
-  formSchema: z.ZodType<T>; // Pass the schema to initialize the form
+interface GenericDialogProps<T extends FieldValues> {
+  formSchema: ZodType<T>; // Pass the schema to initialize the form
   FormComponent: React.ComponentType<{ form: UseFormReturn<T> }>;
   object?: T;
   addAction: (data: T) => Promise<void>;
@@ -28,7 +27,7 @@ interface GenericDialogProps<T> {
   submitButtonLabel?: string;
 }
 
-export default function GenericDialog<T>({
+export default function GenericDialog<T extends FieldValues>({
   formSchema,
   FormComponent,
   object,
@@ -42,10 +41,17 @@ export default function GenericDialog<T>({
 }: GenericDialogProps<T>) {
   const [open, setOpen] = useState(false);
 
-  // Initialize useForm with the schema and default values
+  // Initialize the form using react-hook-form
   const form = useForm<T>({
-    resolver: zodResolver(formSchema),
-    defaultValues: object,
+    resolver: async (values) => {
+      try {
+        const result = formSchema.parse(values);
+        return { values: result, errors: {} };
+      } catch (err: any) {
+        return { values: {}, errors: err.formErrors?.fieldErrors };
+      }
+    },
+    defaultValues: object as DefaultValues<T>,
   });
 
   const handleSubmit = async (data: T) => {
@@ -53,6 +59,7 @@ export default function GenericDialog<T>({
       await editAction(data);
     } else {
       await addAction(data);
+      console.log('User added:', data);
     }
     setOpen(false);
   };
@@ -65,14 +72,16 @@ export default function GenericDialog<T>({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{object ? editDialogTitle : addDialogTitle}</DialogTitle>
-          <DialogDescription>{dialogDescription}</DialogDescription>
+          <DialogDescription>
+            {dialogDescription}
+          </DialogDescription>
         </DialogHeader>
-        <FormComponent form={form} />
-        <DialogFooter>
-          <Button type="submit" form="genericForm" onClick={form.handleSubmit(handleSubmit)}>
-            {submitButtonLabel}
-          </Button>
-        </DialogFooter>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <FormComponent form={form} />
+          <DialogFooter>
+            <Button type="submit">{submitButtonLabel}</Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
