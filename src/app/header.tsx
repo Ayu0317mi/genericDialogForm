@@ -6,17 +6,11 @@ import { JSX, SVGProps } from "react";
 const AppHeader: React.FC = () => {
         return (
             <header className="px-4 lg:px-6 h-14 flex items-center">
-            <Link href="/" className="flex items-center justify-center" prefetch={false}>
+            <Link href="/generic" className="flex items-center justify-center" prefetch={false}>
               <MountainIcon className="h-6 w-6" />
               <span className="sr-only">Person App Shadcn</span>
             </Link>
             <nav className="ml-auto flex gap-4 sm:gap-6">
-              <Link href="/" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
-                PersonList
-              </Link>
-              <Link href="/person" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
-                Client Side
-              </Link>
               <Link href="/generic" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
                 Generic Modal
               </Link>
