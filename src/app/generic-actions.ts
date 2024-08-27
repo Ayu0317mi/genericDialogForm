@@ -11,7 +11,7 @@ const mockData: Person[] = [
     { id: 3, firstname: "Bob", lastname: "Brown", phone: "3456789012", dob: new Date() },
 ];
 
-const validation_path: string = "https://generic-dialog-form.vercel.app/";
+const validation_path: string = "/";
 
 export async function getPerson(): Promise<Person[] | null> {
     return mockData;
@@ -19,7 +19,7 @@ export async function getPerson(): Promise<Person[] | null> {
 
 export type PersonFormData = z.infer<typeof personFormSchema>;
 
-export const addUser = async (data: PersonFormData): Promise<void> =>{
+export const addUser = async (data: PersonFormData): Promise<Person> =>{
     'use server';
     let newId = Math.floor(Math.random() * 1000);
     while (mockData.some(p => p.id === newId)) {
@@ -33,6 +33,7 @@ export const addUser = async (data: PersonFormData): Promise<void> =>{
     mockData.push(newPerson);
 
     revalidatePath(validation_path);
+    return newPerson;
 };
 
 export const editUser = async (data: PersonFormData): Promise<void> =>{
