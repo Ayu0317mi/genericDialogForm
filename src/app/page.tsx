@@ -1,6 +1,6 @@
 'use server';
 
-import { getPerson } from "./generic-actions";
+import { getPerson, addUser, editUser } from "./generic-actions";
 import PersonTable from "./person-table";
 
 

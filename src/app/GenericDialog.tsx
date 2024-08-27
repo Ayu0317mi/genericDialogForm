@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -37,15 +37,12 @@ export default function GenericDialog<T>({
 }: GenericDialogProps<T>) {
   const [open, setOpen] = useState(false)
 
-  useEffect(() => {
-    console.log("Dialog open state: ", open);
-  }, [open]);
-
   const handleSubmit = async (data: T) => {
     if (object) {
       await editAction(data)
     } else {
       await addAction(data)
+      console.log('User added:', data);
     }
     setOpen(false)
   }
