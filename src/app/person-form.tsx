@@ -4,7 +4,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import GenericDialog from "./GenericDialog";
 import { personFormSchema } from "./form-schema";
-import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { Person } from '@/lib/model';
 
@@ -17,11 +16,11 @@ interface PersonFormProps {
   editAction: (data: FormSchemaType) => Promise<void>;
 }
 
-const PersonForm: React.FC<PersonFormProps> = ({ object, addAction, editAction }) => {
+export default async function PersonForm({ object, addAction, editAction }: PersonFormProps) {
   return (
     <GenericDialog
       formSchema={personFormSchema}
-      FormComponent={({ form }: { form: UseFormReturn<FormSchemaType> }) => (
+      FormComponent={({ form }) => (
         <Form {...form}>
           <FormField
             control={form.control}
@@ -69,6 +68,4 @@ const PersonForm: React.FC<PersonFormProps> = ({ object, addAction, editAction }
       object={object}
     />
   );
-};
-
-export default PersonForm;
+}
