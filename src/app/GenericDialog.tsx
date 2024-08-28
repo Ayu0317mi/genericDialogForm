@@ -26,6 +26,7 @@ interface GenericDialogProps<T extends FieldValues> {
   editDialogTitle?: string;
   dialogDescription?: string;
   submitButtonLabel?: string;
+  toastMessage?: string;
 }
 
 export default function GenericDialog<T extends FieldValues>({
@@ -39,6 +40,7 @@ export default function GenericDialog<T extends FieldValues>({
   editDialogTitle = 'Edit Item',
   dialogDescription = 'Make changes to your item here. Click save when you\'re done.',
   submitButtonLabel = object ? 'Save Changes' : 'Add Item',
+  toastMessage = object ? 'Person Edited' : 'Person Added successfully',
 }: GenericDialogProps<T>) {
   const [open, setOpen] = useState(false);
 
@@ -64,10 +66,10 @@ export default function GenericDialog<T extends FieldValues>({
   const handleSubmit = async (data: T) => {
     if (object) {
       await editAction(data);
-      toast.success('Person Edited');
+      toast.success(toastMessage); 
     } else {
       await addAction(data);
-      toast.success('Person Added successfully');
+      toast.success(toastMessage); 
     }
     setOpen(false);
   };
