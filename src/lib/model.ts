@@ -3,5 +3,4 @@ export interface Person {
     firstname: string;
     lastname: string;
     phone: string;
-    dob: Date;
 }

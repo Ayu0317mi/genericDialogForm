@@ -17,7 +17,7 @@ import {
 interface GenericDialogProps<T extends FieldValues> {
   formSchema: ZodType<T>; // Pass the schema to initialize the form
   FormComponent: React.ComponentType<{ form: UseFormReturn<T> }>;
-  object?: T;
+  object?: T; // Optional, used for editing
   addAction: (data: T) => Promise<void>;
   editAction: (data: T) => Promise<void>;
   triggerButtonLabel?: string;
@@ -59,7 +59,6 @@ export default function GenericDialog<T extends FieldValues>({
       await editAction(data);
     } else {
       await addAction(data);
-      console.log('User added:', data);
     }
     setOpen(false);
   };

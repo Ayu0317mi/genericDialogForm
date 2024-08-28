@@ -6,13 +6,7 @@ import GenericDialog from "./GenericDialog";
 import { personFormSchema } from "./form-schema";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-
-interface Person {
-  id: number;
-  firstname: string;
-  lastname: string;
-  phone: string;
-}
+import { Person } from '@/lib/model';
 
 // Infer the form schema type
 type FormSchemaType = z.infer<typeof personFormSchema>;
@@ -72,7 +66,7 @@ const PersonForm: React.FC<PersonFormProps> = ({ object, addAction, editAction }
       )}
       editAction={editAction}
       addAction={addAction}
-      object={object} // Pass the object to GenericDialog
+      object={object}
     />
   );
 };

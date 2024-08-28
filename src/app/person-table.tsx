@@ -4,13 +4,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from "@/components/ui/table";
 import PersonForm from "./person-form";
 import { addUser, editUser } from "./generic-actions";
-
-interface Person {
-    id: number;
-    firstname: string;
-    lastname: string;
-    phone: string;
-}
+import { Person } from '@/lib/model';
 
 interface PersonTableProps {
     persons: Person[];
