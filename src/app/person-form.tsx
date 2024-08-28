@@ -16,7 +16,7 @@ interface PersonFormProps {
   editAction: (data: FormSchemaType) => Promise<void>;
 }
 
-export default async function PersonForm({ object, addAction, editAction }: PersonFormProps) {
+export default function PersonForm({ object, addAction, editAction }: PersonFormProps) {
   return (
     <GenericDialog
       formSchema={personFormSchema}
@@ -34,7 +34,7 @@ export default async function PersonForm({ object, addAction, editAction }: Pers
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> 
           <FormField
             control={form.control}
             name="lastname"

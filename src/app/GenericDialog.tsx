@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { toast } from 'sonner';
 
 interface GenericDialogProps<T extends FieldValues> {
   formSchema: ZodType<T>; // Pass the schema to initialize the form
@@ -57,8 +58,10 @@ export default function GenericDialog<T extends FieldValues>({
   const handleSubmit = async (data: T) => {
     if (object) {
       await editAction(data);
+      toast.success('Person Edited');
     } else {
       await addAction(data);
+      toast.success('Person Added successfully');
     }
     setOpen(false);
   };
