@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, UseFormReturn, FieldValues, DefaultValues } from 'react-hook-form';
 import { z, ZodType } from 'zod';
 import { Button } from "@/components/ui/button";
@@ -16,9 +16,9 @@ import {
 import { toast } from 'sonner';
 
 interface GenericDialogProps<T extends FieldValues> {
-  formSchema: ZodType<T>; // Pass the schema to initialize the form
+  formSchema: ZodType<T>;
   FormComponent: React.ComponentType<{ form: UseFormReturn<T> }>;
-  object?: T; // Optional, used for editing
+  object?: T;
   addAction: (data: T) => Promise<void>;
   editAction: (data: T) => Promise<void>;
   triggerButtonLabel?: string;
@@ -42,7 +42,6 @@ export default function GenericDialog<T extends FieldValues>({
 }: GenericDialogProps<T>) {
   const [open, setOpen] = useState(false);
 
-  // Initialize the form using react-hook-form
   const form = useForm<T>({
     resolver: async (values) => {
       try {
@@ -54,6 +53,13 @@ export default function GenericDialog<T extends FieldValues>({
     },
     defaultValues: object as DefaultValues<T>,
   });
+
+  // Reset the form when the dialog is closed
+  useEffect(() => {
+    if (!object) {
+      form.reset();
+    }
+  }, [open, object, form]);
 
   const handleSubmit = async (data: T) => {
     if (object) {
