@@ -1,3 +1,4 @@
+//src/app/person-form.tsx 
 'use client';
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -6,14 +7,15 @@ import GenericDialog from "./GenericDialog";
 import { personFormSchema } from "./form-schema";
 import { z } from "zod";
 import { Person } from '@/lib/model';
+import { ActionState } from "@/lib/action-state";
 
 // Infer the form schema type
 type FormSchemaType = z.infer<typeof personFormSchema>;
 
 interface PersonFormProps {
   object?: Person;
-  addAction: (data: FormSchemaType) => Promise<void>;
-  editAction: (data: FormSchemaType) => Promise<void>;
+  addAction: (data: FormSchemaType) => Promise<ActionState>;
+  editAction: (data: FormSchemaType) => Promise<ActionState>;
 }
 
 export default function PersonForm({ object, addAction, editAction }: PersonFormProps) {

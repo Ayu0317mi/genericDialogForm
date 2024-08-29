@@ -1,3 +1,4 @@
+//src/app/GenericDialog.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -14,19 +15,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from 'sonner';
+import { ActionState } from '@/lib/action-state';
 
 interface GenericDialogProps<T extends FieldValues> {
   formSchema: ZodType<T>;
   FormComponent: React.ComponentType<{ form: UseFormReturn<T> }>;
   object?: T;
-  addAction: (data: T) => Promise<void>;
-  editAction: (data: T) => Promise<void>;
+  addAction: (data: T) => Promise<ActionState>;
+  editAction: (data: T) => Promise<ActionState>;
   triggerButtonLabel?: string;
   addDialogTitle?: string;
   editDialogTitle?: string;
   dialogDescription?: string;
   submitButtonLabel?: string;
-  toastMessage?: string;
 }
 
 export default function GenericDialog<T extends FieldValues>({
@@ -38,9 +39,8 @@ export default function GenericDialog<T extends FieldValues>({
   triggerButtonLabel = object ? 'Edit' : 'Add New',
   addDialogTitle = 'Add New Item',
   editDialogTitle = 'Edit Item',
-  dialogDescription = 'Make changes to your item here. Click save when you\'re done.',
+  dialogDescription = object? 'Make changes to your item here. Click save when you\'re done.' : 'Fill out the form below to add a new item.',
   submitButtonLabel = object ? 'Save Changes' : 'Add Item',
-  toastMessage = object ? 'Person Edited' : 'Person Added successfully',
 }: GenericDialogProps<T>) {
   const [open, setOpen] = useState(false);
 
@@ -63,16 +63,18 @@ export default function GenericDialog<T extends FieldValues>({
     }
   }, [open, object, form]);
 
-  const handleSubmit = async (data: T) => {
-    if (object) {
-      await editAction(data);
-      toast.success(toastMessage); 
-    } else {
-      await addAction(data);
-      toast.success(toastMessage); 
+  async function handleSubmit(data: T) {
+    const actions = object ? await editAction(data) : await addAction(data);
+    
+    if (actions.success) {
+      const toastMessage = actions.message;
+      toast.success(toastMessage);
+    }else{
+      const toastMessage = actions.message;
+      toast.error(toastMessage);
     }
     setOpen(false);
-  };
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -88,6 +90,7 @@ export default function GenericDialog<T extends FieldValues>({
         </DialogHeader>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FormComponent form={form} />
+
           <DialogFooter>
             <Button type="submit">{submitButtonLabel}</Button>
           </DialogFooter>

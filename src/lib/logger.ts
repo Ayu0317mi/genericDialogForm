@@ -1,4 +1,4 @@
-//  /lib/logger.ts
+// src/lib/logger.ts
 
 import pino from 'pino';
 
