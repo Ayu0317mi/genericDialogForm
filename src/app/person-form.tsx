@@ -13,13 +13,12 @@ import { ActionState } from "@/lib/action-state";
 type FormSchemaType = z.infer<typeof personFormSchema>;
 
 interface PersonFormProps {
-  listName: string;
   object?: Person;
   addAction: (data: FormSchemaType) => Promise<ActionState>;
   editAction: (data: FormSchemaType) => Promise<ActionState>;
 }
 
-export default function PersonForm({ listName, object, addAction, editAction }: PersonFormProps) {
+export default function PersonForm({ object, addAction, editAction }: PersonFormProps) {
   return (
     <GenericDialog
       FormComponent={({ form }) => (
@@ -69,11 +68,10 @@ export default function PersonForm({ listName, object, addAction, editAction }: 
       editAction={editAction}
       addAction={addAction}
       object={object}
-      triggerButtonLabel={object ? `Edit ${listName}` : `Add ${listName}`}
-      addDialogTitle={`Add ${listName}`}
-      editDialogTitle={`Edit ${listName}`}
-      submitButtonLabel={object ? `Update ${listName}` : `Add ${listName}`}
-      dialogDescription={object ? `Make changes to your ${listName.toLowerCase()} here. Click save when you're done.` : `Fill out the form below to add a new ${listName.toLowerCase()}.`}
+
+      // customize Dialoge labels and descriptions
+      addDialogTitle="Add New Entry"
+      dialogDescription = {object? 'Modify the data and click save.' : 'Fill out the form below to create a new item.'}
     />
   );
 }

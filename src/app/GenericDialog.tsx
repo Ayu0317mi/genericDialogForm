@@ -36,11 +36,12 @@ export default function GenericDialog<T extends FieldValues>({
   object,
   addAction,
   editAction,
-  triggerButtonLabel,
-  addDialogTitle,
-  editDialogTitle,
-  dialogDescription,
-  submitButtonLabel,
+  // Default values for the optional props
+  triggerButtonLabel = object ? 'Edit' : 'Add',
+  addDialogTitle = 'Add',
+  editDialogTitle = 'Edit',
+  dialogDescription = object? 'Make changes to your item here. Click save when you\'re done.' : 'Fill out the form below to add a new item.',
+  submitButtonLabel = object ? 'Save' : 'Add',
 }: GenericDialogProps<T>) {
   const [open, setOpen] = useState(false);
 

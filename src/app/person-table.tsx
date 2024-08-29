@@ -7,8 +7,6 @@ import PersonForm from "./person-form";
 import { addUser, editUser } from "./generic-actions";
 import { Person } from '@/lib/model';
 
-const listName = "Person";
-
 interface PersonTableProps {
     persons: Person[];
 }
@@ -19,8 +17,8 @@ const PersonTable = ({ persons }: PersonTableProps) => {
             <Card className="w-full max-w-4xl bg-white shadow-lg rounded-lg">
                 <CardHeader>
                     <div className="flex justify-between items-center">
-                        <h3 className="text-lg font-bold">{listName} List</h3>
-                        <PersonForm listName={listName} addAction={addUser} editAction={editUser} />
+                        <h3 className="text-lg font-bold">Person List</h3>
+                        <PersonForm addAction={addUser} editAction={editUser} />
                     </div>
                 </CardHeader>
                 <CardContent className="p-8">
@@ -42,7 +40,6 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                                     <TableCell>
                                     <PersonForm 
                                             object={person}
-                                            listName={listName}
                                             addAction={addUser} 
                                             editAction={editUser} 
                                         />
