@@ -8,6 +8,7 @@ import { revalidatePath } from 'next/cache';
 import { ActionState } from '@/lib/action-state';
 const validation_path: string = "/";
 export type PersonFormData = z.infer<typeof personFormSchema>;
+import { OptionType } from '@/lib/autocomplete-type';
 
 const mockData: Person[] = [
     { id: 1, firstname: "John", lastname: "Doe", phone: "1234567890", stateName: "Queensland" },
@@ -68,8 +69,7 @@ export async function editUser(data: PersonFormData): Promise<ActionState> {
     return actionState;
 };
 
-
-//AutoComplete function
+// AutoComplete function
 export async function searchState(query: string): Promise<string[]> {
     const states = [
       'Queensland',
@@ -77,7 +77,7 @@ export async function searchState(query: string): Promise<string[]> {
       'ACT',
       'Victoria',
       'Western Australia',
-      // Add more common IT roles here...
+      // Add more states here...
     ];
   
     const filteredStates = states
@@ -87,4 +87,28 @@ export async function searchState(query: string): Promise<string[]> {
       .slice(0, 5);
   
     return filteredStates;
-  }
+}
+
+export async function loadState(inputValue: string): Promise<OptionType[]> {
+    console.log("loadState called with:", inputValue);
+    if (inputValue.length < 1) return [];
+  
+    const states = await searchState(inputValue);
+    
+    const formattedStates = states.map((state) => ({ label: state, value: state }));
+    
+    if (formattedStates.length === 0) {
+        formattedStates.push({
+            label: `Add "${inputValue}"`,
+            value: inputValue,
+            isNew: true,
+        } as OptionType);
+    }
+    
+    return formattedStates;
+}
+
+export async function addState(newState: string) {
+    console.log(`Adding new state: ${newState}`);
+}
+  

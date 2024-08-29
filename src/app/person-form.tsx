@@ -9,7 +9,8 @@ import { z } from "zod";
 import { Person } from '@/lib/model';
 import { ActionState } from "@/lib/action-state";
 import AsyncSelect from 'react-select/async';
-import {searchState} from './generic-actions';
+import {loadState, addState} from './generic-actions';
+import { OptionType } from '@/lib/autocomplete-type';
 
 
 // Person schema
@@ -20,35 +21,6 @@ interface PersonFormProps {
   addAction: (data: FormSchemaType) => Promise<ActionState>;
   editAction: (data: FormSchemaType) => Promise<ActionState>;
 }
-
-// Define a custom type that extends the default react-select option
-interface OptionType {
-  label: string;
-  value: string;
-  isNew?: boolean; // Allow the __isNew__ property
-}
-
-const loadStates = async (inputValue: string): Promise<OptionType[]> => {
-  if (inputValue.length < 1) return [];
-
-  const roles = await searchState(inputValue);
-  
-  const formattedStates = roles.map((state) => ({ label: state, value: state }));
-  
-  if (formattedStates.length === 0) {
-      formattedStates.push({
-          label: `Add "${inputValue}"`,
-          value: inputValue,
-          isNew : true,
-      }as OptionType);
-  }
-  
-  return formattedStates;
-};
-
-const addState = async (newState: string) => {
-  console.log(`Adding new state: ${newState}`);
-};
 
 export default function PersonForm({ object, addAction, editAction }: PersonFormProps) {
   return (
@@ -101,21 +73,23 @@ export default function PersonForm({ object, addAction, editAction }: PersonForm
               <FormItem>
                 <FormLabel>Address State Name</FormLabel>
                 <AsyncSelect<OptionType>
-                cacheOptions
-                loadOptions={loadStates}
-                defaultOptions
-                onChange={(selectedOption) => {
-                  if (selectedOption?.isNew) {
-                    addState(selectedOption.value);
-                    field.onChange(selectedOption.value);
-                  } else {
-                    field.onChange(selectedOption?.value);
-                  }
-                }}
-                placeholder="Select or type state name"
-                value={field.value ? { label: field.value, value: field.value } : null}
-                isClearable
-              />
+                  cacheOptions
+                  loadOptions={(inputValue) => {
+                    return loadState(inputValue);
+                  }}
+                  defaultOptions
+                  onChange={(selectedOption) => {
+                    if (selectedOption?.isNew) {
+                      addState(selectedOption.value);
+                      field.onChange(selectedOption.value);
+                    } else {
+                      field.onChange(selectedOption?.value);
+                    }
+                  }}
+                  placeholder="Select or type state name"
+                  value={field.value ? { label: field.value, value: field.value } : null}
+                  isClearable
+                />
               </FormItem>
             )}
           />
@@ -125,6 +99,7 @@ export default function PersonForm({ object, addAction, editAction }: PersonForm
       editAction={editAction}
       addAction={addAction}
       object={object}
+      loadOptions={loadState}
 
       // customize Dialoge labels and descriptions
       addDialogTitle="Add New Entry"

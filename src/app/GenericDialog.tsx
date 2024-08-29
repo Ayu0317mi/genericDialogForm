@@ -23,6 +23,7 @@ interface GenericDialogProps<T extends FieldValues> {
   object?: T;
   addAction: (data: T) => Promise<ActionState>;
   editAction: (data: T) => Promise<ActionState>;
+  loadOptions?: (inputValue: string) => Promise<{ label: string; value: string }[]>;
   triggerButtonLabel?: string;
   addDialogTitle?: string;
   editDialogTitle?: string;
@@ -36,6 +37,7 @@ export default function GenericDialog<T extends FieldValues>({
   object,
   addAction,
   editAction,
+  loadOptions,
   // Default values for the optional props
   triggerButtonLabel = object ? 'Edit' : 'Add',
   addDialogTitle = 'Add',
