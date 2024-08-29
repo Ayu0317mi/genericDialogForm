@@ -28,6 +28,7 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                                 <TableHead className="text-left">First name</TableHead>
                                 <TableHead className="text-left">Last name</TableHead>
                                 <TableHead className="text-left">Phone Number</TableHead>
+                                <TableHead className="text-left">State</TableHead>
                                 <TableHead className="text-left">Action</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -35,8 +36,9 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                             {persons.map((person) => (
                                 <TableRow key={person.id}>
                                     <TableCell>{person.firstname}</TableCell>
-                                    <TableCell>{person.lastname}</TableCell>  
-                                    <TableCell>{person.phone}</TableCell>
+                                    <TableCell>{person.lastname}</TableCell>
+                                    <TableCell>{person.phone}</TableCell>  
+                                    <TableCell>{person.stateName}</TableCell>
                                     <TableCell>
                                     <PersonForm 
                                             object={person}

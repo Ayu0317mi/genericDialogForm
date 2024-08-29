@@ -10,9 +10,9 @@ const validation_path: string = "/";
 export type PersonFormData = z.infer<typeof personFormSchema>;
 
 const mockData: Person[] = [
-    { id: 1, firstname: "John", lastname: "Doe", phone: "1234567890"},
-    { id: 2, firstname: "Jane", lastname: "Smith", phone: "2345678901"},
-    { id: 3, firstname: "Bob", lastname: "Brown", phone: "3456789012"},
+    { id: 1, firstname: "John", lastname: "Doe", phone: "1234567890", stateName: "Queensland" },
+    { id: 2, firstname: "Jane", lastname: "Smith", phone: "2345678901", stateName: "New South Wales" },
+    { id: 3, firstname: "Bob", lastname: "Brown", phone: "3456789012", stateName: "New South Wales" },
 ];
 
 //Get all Data
@@ -28,7 +28,7 @@ export async function addUser(data: PersonFormData): Promise<ActionState> {
     }
 
     // Create a new Person object with the generated ID
-    const newPerson: Person = { id: newId, ...data };
+    const newPerson: Person = { id: newId, ...data,};
 
     // Add the new person to the mockData array
     mockData.push(newPerson);
@@ -67,3 +67,24 @@ export async function editUser(data: PersonFormData): Promise<ActionState> {
     };
     return actionState;
 };
+
+
+//AutoComplete function
+export async function searchState(query: string): Promise<string[]> {
+    const states = [
+      'Queensland',
+      'New South Wales',
+      'ACT',
+      'Victoria',
+      'Western Australia',
+      // Add more common IT roles here...
+    ];
+  
+    const filteredStates = states
+      .filter((state) =>
+        state.toLowerCase().startsWith(query.toLowerCase())
+      )
+      .slice(0, 5);
+  
+    return filteredStates;
+  }

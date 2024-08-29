@@ -3,4 +3,5 @@ export interface Person {
     firstname: string;
     lastname: string;
     phone: string;
+    stateName: string;
 }

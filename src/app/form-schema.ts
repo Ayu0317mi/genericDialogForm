@@ -11,4 +11,7 @@ export const personFormSchema = z.object({
     phone: z.string().min(10, { 
       message: "Phone number must be at least 10 characters."
     }),
+    stateName: z.string().min(2, {
+      message: "State name must be at least 2 characters."
+    }),
 })
