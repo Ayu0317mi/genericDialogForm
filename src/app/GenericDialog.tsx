@@ -1,6 +1,6 @@
-//src/app/GenericDialog.tsx
 'use client';
 
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useForm, UseFormReturn, FieldValues, DefaultValues } from 'react-hook-form';
 import { z, ZodType } from 'zod';
@@ -36,11 +36,11 @@ export default function GenericDialog<T extends FieldValues>({
   object,
   addAction,
   editAction,
-  triggerButtonLabel = object ? 'Edit' : 'Add New',
-  addDialogTitle = 'Add New Item',
-  editDialogTitle = 'Edit Item',
-  dialogDescription = object? 'Make changes to your item here. Click save when you\'re done.' : 'Fill out the form below to add a new item.',
-  submitButtonLabel = object ? 'Save Changes' : 'Add Item',
+  triggerButtonLabel,
+  addDialogTitle,
+  editDialogTitle,
+  dialogDescription,
+  submitButtonLabel,
 }: GenericDialogProps<T>) {
   const [open, setOpen] = useState(false);
 
@@ -69,7 +69,7 @@ export default function GenericDialog<T extends FieldValues>({
     if (actions.success) {
       const toastMessage = actions.message;
       toast.success(toastMessage);
-    }else{
+    } else {
       const toastMessage = actions.message;
       toast.error(toastMessage);
     }
@@ -90,10 +90,12 @@ export default function GenericDialog<T extends FieldValues>({
         </DialogHeader>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FormComponent form={form} />
-
-          <DialogFooter>
-            <Button type="submit">{submitButtonLabel}</Button>
-          </DialogFooter>
+          <div className="mt-4">
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setOpen(false)}>Close</Button>
+              <Button type="submit">{submitButtonLabel}</Button>
+            </DialogFooter>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

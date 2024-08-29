@@ -1,4 +1,4 @@
-//src/app/person-table.tsx
+// src/app/person-table.tsx
 'use server';
 
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -20,7 +20,7 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                 <CardHeader>
                     <div className="flex justify-between items-center">
                         <h3 className="text-lg font-bold">{listName} List</h3>
-                        <PersonForm addAction={addUser} editAction={editUser} />
+                        <PersonForm listName={listName} addAction={addUser} editAction={editUser} />
                     </div>
                 </CardHeader>
                 <CardContent className="p-8">
@@ -42,6 +42,7 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                                     <TableCell>
                                     <PersonForm 
                                             object={person}
+                                            listName={listName}
                                             addAction={addUser} 
                                             editAction={editUser} 
                                         />
