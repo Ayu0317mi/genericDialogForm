@@ -9,7 +9,7 @@ import { z } from "zod";
 import { Person } from '@/lib/model';
 import { ActionState } from "@/lib/action-state";
 import AsyncSelect from 'react-select/async';
-import {loadState, addState} from './generic-actions';
+import {loadInputValue, addInputValue} from './server-actions';
 import { OptionType } from '@/lib/autocomplete-type';
 
 
@@ -20,6 +20,7 @@ interface PersonFormProps {
   object?: Person;
   addAction: (data: FormSchemaType) => Promise<ActionState>;
   editAction: (data: FormSchemaType) => Promise<ActionState>;
+  loadOptions: (type: "states" | "cities" | "roles", inputValue: string) => Promise<{ label: string; value: string; }[]>;
 }
 
 export default function PersonForm({ object, addAction, editAction }: PersonFormProps) {
@@ -75,12 +76,12 @@ export default function PersonForm({ object, addAction, editAction }: PersonForm
                 <AsyncSelect<OptionType>
                   cacheOptions
                   loadOptions={(inputValue) => {
-                    return loadState(inputValue);
+                    return loadInputValue("states", inputValue);
                   }}
                   defaultOptions
                   onChange={(selectedOption) => {
                     if (selectedOption?.isNew) {
-                      addState(selectedOption.value);
+                      addInputValue("states", selectedOption.value);
                       field.onChange(selectedOption.value);
                     } else {
                       field.onChange(selectedOption?.value);
@@ -93,13 +94,67 @@ export default function PersonForm({ object, addAction, editAction }: PersonForm
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="cityName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>City Name</FormLabel>
+                <AsyncSelect<OptionType>
+                  cacheOptions
+                  loadOptions={(inputValue) => {
+                    return loadInputValue("cities", inputValue);
+                  }}
+                  defaultOptions
+                  onChange={(selectedOption) => {
+                    if (selectedOption?.isNew) {
+                      addInputValue("cities", selectedOption.value);
+                      field.onChange(selectedOption.value);
+                    } else {
+                      field.onChange(selectedOption?.value);
+                    }
+                  }}
+                  placeholder="Select or type city name"
+                  value={field.value ? { label: field.value, value: field.value } : null}
+                  isClearable
+                />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Roles</FormLabel>
+                <AsyncSelect<OptionType>
+                  cacheOptions
+                  loadOptions={(inputValue) => {
+                    return loadInputValue("roles", inputValue);
+                  }}
+                  defaultOptions
+                  onChange={(selectedOption) => {
+                    if (selectedOption?.isNew) {
+                      addInputValue("roles", selectedOption.value);
+                      field.onChange(selectedOption.value);
+                    } else {
+                      field.onChange(selectedOption?.value);
+                    }
+                  }}
+                  placeholder="Select or type Role name"
+                  value={field.value ? { label: field.value, value: field.value } : null}
+                  isClearable
+                />
+              </FormItem>
+            )}
+          />
         </Form>
       )}
       formSchema={personFormSchema}
       editAction={editAction}
       addAction={addAction}
       object={object}
-      loadOptions={loadState}
+      loadOptions={loadInputValue}
 
       // customize Dialoge labels and descriptions
       addDialogTitle="Add New Entry"

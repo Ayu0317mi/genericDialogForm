@@ -1,7 +1,7 @@
 //src/app/page.tsx
 'use server';
 
-import { getPerson} from "./generic-actions";
+import { getPerson} from "./server-actions";
 import PersonTable from "./person-table";
 
 

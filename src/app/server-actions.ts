@@ -11,9 +11,9 @@ export type PersonFormData = z.infer<typeof personFormSchema>;
 import { OptionType } from '@/lib/autocomplete-type';
 
 const mockData: Person[] = [
-    { id: 1, firstname: "John", lastname: "Doe", phone: "1234567890", stateName: "Queensland" },
-    { id: 2, firstname: "Jane", lastname: "Smith", phone: "2345678901", stateName: "New South Wales" },
-    { id: 3, firstname: "Bob", lastname: "Brown", phone: "3456789012", stateName: "New South Wales" },
+    { id: 1, firstname: "John", lastname: "Doe", phone: "1234567890", stateName: "Queensland", cityName: "Brisbane", role: "Admin" },
+    { id: 2, firstname: "Jane", lastname: "Smith", phone: "2345678901", stateName: "New South Wales", cityName: "Sydney", role: "User" },
+    { id: 3, firstname: "Bob", lastname: "Brown", phone: "3456789012", stateName: "New South Wales", cityName: "Sydney", role: "VIP" },
 ];
 
 //Get all Data
@@ -70,45 +70,62 @@ export async function editUser(data: PersonFormData): Promise<ActionState> {
 };
 
 // AutoComplete function
-export async function searchState(query: string): Promise<string[]> {
-    const states = [
-      'Queensland',
-      'New South Wales',
-      'ACT',
-      'Victoria',
-      'Western Australia',
-      // Add more states here...
-    ];
-  
-    const filteredStates = states
-      .filter((state) =>
-        state.toLowerCase().startsWith(query.toLowerCase())
-      )
-      .slice(0, 5);
-  
-    return filteredStates;
-}
+const defaultValues = {
+    states: [
+        'Queensland',
+        'New South Wales',
+        'ACT',
+        'Victoria',
+        'Western Australia',
+        // Add more states here...
+    ],
+    cities: [
+        'Brisbane',
+        'Sydney',
+        'Melbourne',
+        'Perth',
+        'Adelaide',
+        // Add more cities here...
+    ],
+    roles: [
+        'Admin',
+        'Regular',
+        'User',
+        'Guest',
+        'VIP',
+        // Add more roles here...
+    ],
+};
 
-export async function loadState(inputValue: string): Promise<OptionType[]> {
-    console.log("loadState called with:", inputValue);
+
+// Generalized function to load and search autocomplete options
+export async function loadInputValue(type: keyof typeof defaultValues, inputValue: string): Promise<OptionType[]> {
     if (inputValue.length < 1) return [];
-  
-    const states = await searchState(inputValue);
-    
-    const formattedStates = states.map((state) => ({ label: state, value: state }));
-    
-    if (formattedStates.length === 0) {
-        formattedStates.push({
+
+    // Perform the search within the load function
+    const items = defaultValues[type];
+    const results = items
+        .filter((item) => item.toLowerCase().startsWith(inputValue.toLowerCase()))
+        .slice(0, 5);
+
+    // Format the results for autocomplete
+    const formattedResults = results.map((item) => ({ label: item, value: item }));
+
+    // If no matches found, suggest adding the new input
+    if (formattedResults.length === 0) {
+        formattedResults.push({
             label: `Add "${inputValue}"`,
             value: inputValue,
             isNew: true,
         } as OptionType);
     }
-    
-    return formattedStates;
+
+    return formattedResults;
 }
 
-export async function addState(newState: string) {
-    console.log(`Adding new state: ${newState}`);
+
+// Generalized function to add options
+export async function addInputValue(type: keyof typeof defaultValues, newLocation: string) {
+    console.log(`Adding new ${type}: ${newLocation}`);
+    defaultValues[type].push(newLocation);
 }
-  

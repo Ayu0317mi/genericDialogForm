@@ -23,7 +23,7 @@ interface GenericDialogProps<T extends FieldValues> {
   object?: T;
   addAction: (data: T) => Promise<ActionState>;
   editAction: (data: T) => Promise<ActionState>;
-  loadOptions?: (inputValue: string) => Promise<{ label: string; value: string }[]>;
+  loadOptions?: (type: "states" | "cities", inputValue: string) => Promise<{ label: string; value: string; }[]>;
   triggerButtonLabel?: string;
   addDialogTitle?: string;
   editDialogTitle?: string;

@@ -14,4 +14,10 @@ export const personFormSchema = z.object({
     stateName: z.string().min(2, {
       message: "State name must be at least 2 characters."
     }),
+    cityName: z.string().min(2, {
+      message: "City name must be at least 2 characters."
+    }),
+    role: z.string().min(2, {
+      message: "Role must be at least 2 characters."
+    }),
 })

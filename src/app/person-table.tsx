@@ -4,7 +4,7 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from "@/components/ui/table";
 import PersonForm from "./person-form";
-import { addUser, editUser } from "./generic-actions";
+import { addUser, editUser, loadInputValue } from "./server-actions";
 import { Person } from '@/lib/model';
 
 interface PersonTableProps {
@@ -18,7 +18,7 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                 <CardHeader>
                     <div className="flex justify-between items-center">
                         <h3 className="text-lg font-bold">Person List</h3>
-                        <PersonForm addAction={addUser} editAction={editUser} />
+                        <PersonForm addAction={addUser} editAction={editUser} loadOptions={loadInputValue} />
                     </div>
                 </CardHeader>
                 <CardContent className="p-8">
@@ -29,6 +29,8 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                                 <TableHead className="text-left">Last name</TableHead>
                                 <TableHead className="text-left">Phone Number</TableHead>
                                 <TableHead className="text-left">State</TableHead>
+                                <TableHead className="text-left">City</TableHead>
+                                <TableHead className="text-left">Role</TableHead>
                                 <TableHead className="text-left">Action</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -37,13 +39,16 @@ const PersonTable = ({ persons }: PersonTableProps) => {
                                 <TableRow key={person.id}>
                                     <TableCell>{person.firstname}</TableCell>
                                     <TableCell>{person.lastname}</TableCell>
-                                    <TableCell>{person.phone}</TableCell>  
+                                    <TableCell>{person.phone}</TableCell>
                                     <TableCell>{person.stateName}</TableCell>
+                                    <TableCell>{person.cityName}</TableCell> 
+                                    <TableCell>{person.role}</TableCell>   
                                     <TableCell>
                                     <PersonForm 
                                             object={person}
                                             addAction={addUser} 
                                             editAction={editUser} 
+                                            loadOptions={loadInputValue}
                                         />
                                     </TableCell>
                                 </TableRow>
