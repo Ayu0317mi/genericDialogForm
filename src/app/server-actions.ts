@@ -8,7 +8,8 @@ import { revalidatePath } from 'next/cache';
 import { ActionState } from '@/lib/action-state';
 const validation_path: string = "/";
 export type PersonFormData = z.infer<typeof personFormSchema>;
-import { OptionType } from '@/lib/autocomplete-type';
+import {AutoCompleteType} from '@/lib/autocomplete-type';
+import {defaultValues as importedDefaultValues} from '@/lib/defaultValues';
 
 const mockData: Person[] = [
     { id: 1, firstname: "John", lastname: "Doe", phone: "1234567890", stateName: "Queensland", cityName: "Brisbane", role: "Admin" },
@@ -70,36 +71,11 @@ export async function editUser(data: PersonFormData): Promise<ActionState> {
 };
 
 // AutoComplete function
-const defaultValues = {
-    states: [
-        'Queensland',
-        'New South Wales',
-        'ACT',
-        'Victoria',
-        'Western Australia',
-        // Add more states here...
-    ],
-    cities: [
-        'Brisbane',
-        'Sydney',
-        'Melbourne',
-        'Perth',
-        'Adelaide',
-        // Add more cities here...
-    ],
-    roles: [
-        'Admin',
-        'Regular',
-        'User',
-        'Guest',
-        'VIP',
-        // Add more roles here...
-    ],
-};
-
+// Import auto-complete default values from the defaultValues file
+const defaultValues = importedDefaultValues;
 
 // Generalized function to load and search autocomplete options
-export async function loadInputValue(type: keyof typeof defaultValues, inputValue: string): Promise<OptionType[]> {
+export async function loadInputValue(type: keyof typeof defaultValues, inputValue: string): Promise<AutoCompleteType[]> {
     if (inputValue.length < 1) return [];
 
     // Perform the search within the load function
@@ -117,7 +93,7 @@ export async function loadInputValue(type: keyof typeof defaultValues, inputValu
             label: `Add "${inputValue}"`,
             value: inputValue,
             isNew: true,
-        } as OptionType);
+        } as AutoCompleteType);
     }
 
     return formattedResults;

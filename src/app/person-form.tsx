@@ -8,9 +8,8 @@ import { personFormSchema } from "./form-schema";
 import { z } from "zod";
 import { Person } from '@/lib/model';
 import { ActionState } from "@/lib/action-state";
-import AsyncSelect from 'react-select/async';
-import {loadInputValue, addInputValue} from './server-actions';
-import { OptionType } from '@/lib/autocomplete-type';
+import {loadInputValue} from './server-actions';
+import AutoCompleteSelect from '@/components/ui/autocomplete-select';
 
 
 // Person schema
@@ -67,86 +66,26 @@ export default function PersonForm({ object, addAction, editAction }: PersonForm
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
+          <AutoCompleteSelect
             name="stateName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Address State Name</FormLabel>
-                <AsyncSelect<OptionType>
-                  cacheOptions
-                  loadOptions={(inputValue) => {
-                    return loadInputValue("states", inputValue);
-                  }}
-                  defaultOptions
-                  onChange={(selectedOption) => {
-                    if (selectedOption?.isNew) {
-                      addInputValue("states", selectedOption.value);
-                      field.onChange(selectedOption.value);
-                    } else {
-                      field.onChange(selectedOption?.value);
-                    }
-                  }}
-                  placeholder="Select or type state name"
-                  value={field.value ? { label: field.value, value: field.value } : null}
-                  isClearable
-                />
-              </FormItem>
-            )}
-          />
-          <FormField
+            inputType="states"
             control={form.control}
+            label="State Name"
+            placeholder="Type state name"
+          />
+          <AutoCompleteSelect
             name="cityName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>City Name</FormLabel>
-                <AsyncSelect<OptionType>
-                  cacheOptions
-                  loadOptions={(inputValue) => {
-                    return loadInputValue("cities", inputValue);
-                  }}
-                  defaultOptions
-                  onChange={(selectedOption) => {
-                    if (selectedOption?.isNew) {
-                      addInputValue("cities", selectedOption.value);
-                      field.onChange(selectedOption.value);
-                    } else {
-                      field.onChange(selectedOption?.value);
-                    }
-                  }}
-                  placeholder="Select or type city name"
-                  value={field.value ? { label: field.value, value: field.value } : null}
-                  isClearable
-                />
-              </FormItem>
-            )}
-          />
-          <FormField
+            inputType="cities"
             control={form.control}
+            label="City Name"
+            placeholder="Type state name"
+          />
+          <AutoCompleteSelect
             name="role"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Roles</FormLabel>
-                <AsyncSelect<OptionType>
-                  cacheOptions
-                  loadOptions={(inputValue) => {
-                    return loadInputValue("roles", inputValue);
-                  }}
-                  defaultOptions
-                  onChange={(selectedOption) => {
-                    if (selectedOption?.isNew) {
-                      addInputValue("roles", selectedOption.value);
-                      field.onChange(selectedOption.value);
-                    } else {
-                      field.onChange(selectedOption?.value);
-                    }
-                  }}
-                  placeholder="Select or type Role name"
-                  value={field.value ? { label: field.value, value: field.value } : null}
-                  isClearable
-                />
-              </FormItem>
-            )}
+            inputType="roles"
+            control={form.control}
+            label="Role"
+            placeholder="Type state name"
           />
         </Form>
       )}
